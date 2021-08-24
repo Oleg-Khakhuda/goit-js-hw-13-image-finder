@@ -3,16 +3,17 @@ import LoadMoreBtn from './js/components/load-more-btn';
 import articlesTpl from './templates/articles.hbs';
 import * as basicLightbox from 'basiclightbox';
 import 'basiclightbox/dist/basicLightbox.min.css';
+import { alert } from '@pnotify/core';
+import '@pnotify/core/dist/PNotify.css';
+import '@pnotify/core/dist/BrightTheme.css';
 
 import './sass/main.scss';
 
 const refs = {
   searchForm: document.querySelector('.search-form'),
     articlesContainer: document.querySelector('.gallery'),
-    element: document.getElementById('.btn-load-more')
+    element: document.getElementById('.btn-load-more'),
 };
-
-
 
 const loadMoreBtn = new LoadMoreBtn({
   selector: '[data-action="load-more"]',
@@ -33,13 +34,14 @@ function onSearch(e) {
   newsApiService.query = e.currentTarget.elements.query.value;
 
   if (newsApiService.query === '') {
-    return alert('Введи что-то нормальное');
+    return onFetchError();
   }
 
   loadMoreBtn.show();
-  newsApiService.resetPage();
+    newsApiService.resetPage();
   clearArticlesContainer();
-  fetchArticles();
+    fetchArticles();
+    
 }
 
 function fetchArticles() {
@@ -47,8 +49,9 @@ function fetchArticles() {
     newsApiService.fetchArticles().then(articles => {
         appendArticlesMarkup(articles);
         loadMoreBtn.enable();
-        scrollToRenderedMarkup();
-    });
+        scrollToRenderedMarkup()
+    })
+    .catch(error => console.log(error))
 }
 
 function appendArticlesMarkup(articles) {
@@ -77,3 +80,15 @@ function scrollToRenderedMarkup() {
     });
   }, 250);
 }
+
+// Ненашли PNotify
+
+function onFetchError() {
+    alert({
+        text: 'Упс, что-то пошло не так и мы ничего не нашли!',
+        delay: 3000,
+    });
+}
+
+
+
