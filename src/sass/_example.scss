@@ -16,7 +16,6 @@ body {
   line-height: 1.5;
   color: #2a2a2a;
   background: linear-gradient(to left, #d3d6db, #595b5f);
-  // color: white;
 }
 
 .search-form {
@@ -45,12 +44,19 @@ body {
   border: 2px solid black;
   cursor: pointer;
   border-radius: 5px;
+  padding: 10px;
+
+  &:hover {
+    background-color: rgb(184, 240, 189);
+  }
 }
 
 .gallery {
-  display: flex;
-  flex-wrap: wrap;
   justify-content: center;
+  display: grid;
+  grid-template-columns: 350px 350px 350px 350px;
+  grid-column-gap: 30px;
+  grid-row-gap: 30px;
 }
 
 .photo-card {
@@ -72,7 +78,7 @@ body {
   display: flex;
   justify-content: space-around;
   padding: 8px;
-  font-size: 20px;
+  font-size: 15px;
 }
 
 .stats-item {
@@ -104,6 +110,11 @@ body {
   background-color: white;
   border: 2px solid black;
   border-radius: 5px;
+  padding: 10px;
+
+  &:hover {
+    background-color: rgb(184, 240, 189);
+  }
 }
 
 img {

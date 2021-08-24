@@ -9,21 +9,23 @@ import './sass/main.scss';
 const refs = {
   searchForm: document.querySelector('.search-form'),
     articlesContainer: document.querySelector('.gallery'),
-    cardsList: document.querySelector('.gallery')
+    element: document.getElementById('.btn-load-more')
 };
 
 
 
 const loadMoreBtn = new LoadMoreBtn({
   selector: '[data-action="load-more"]',
-  hidden: true,
+    hidden: true,
+  
 });
+
 const newsApiService = new NewsApiService();
 
 
 refs.searchForm.addEventListener('submit', onSearch);
 loadMoreBtn.refs.button.addEventListener('click', fetchArticles);
-refs.cardsList.addEventListener('click', openModal);
+refs.articlesContainer.addEventListener('click', openModal);
 
 function onSearch(e) {
   e.preventDefault();
@@ -42,10 +44,11 @@ function onSearch(e) {
 
 function fetchArticles() {
   loadMoreBtn.disable();
-  newsApiService.fetchArticles().then(articles => {
-    appendArticlesMarkup(articles);
-    loadMoreBtn.enable();
-  });
+    newsApiService.fetchArticles().then(articles => {
+        appendArticlesMarkup(articles);
+        loadMoreBtn.enable();
+        scrollToRenderedMarkup();
+    });
 }
 
 function appendArticlesMarkup(articles) {
@@ -64,4 +67,13 @@ function openModal(event) {
             `<img src="${event.target.dataset.src}">`,
     );
         instance.show();
+}
+
+function scrollToRenderedMarkup() {
+  setTimeout(() => {
+    loadMoreBtn.refs.button.scrollIntoView({
+      behavior: 'smooth',
+      block: 'end',
+    });
+  }, 250);
 }
