@@ -54,7 +54,7 @@ body {
 .gallery {
   justify-content: center;
   display: grid;
-  grid-template-columns: 350px 350px 350px 350px;
+  grid-template-columns: 400px 400px 400px;
   grid-column-gap: 30px;
   grid-row-gap: 30px;
 }
@@ -111,6 +111,7 @@ body {
   border: 2px solid black;
   border-radius: 5px;
   padding: 10px;
+  cursor: pointer;
 
   &:hover {
     background-color: rgb(184, 240, 189);

@@ -2,17 +2,16 @@ import NewsApiService from './js/apiService';
 import LoadMoreBtn from './js/components/load-more-btn';
 import articlesTpl from './templates/articles.hbs';
 import * as basicLightbox from 'basiclightbox';
-import 'basiclightbox/dist/basicLightbox.min.css';
+import '../node_modules/basiclightbox/dist/basicLightbox.min.css';
 import { alert } from '@pnotify/core';
 import '@pnotify/core/dist/PNotify.css';
 import '@pnotify/core/dist/BrightTheme.css';
-
 import './sass/main.scss';
 
 const refs = {
   searchForm: document.querySelector('.search-form'),
-    articlesContainer: document.querySelector('.gallery'),
-    element: document.getElementById('.btn-load-more'),
+  articlesContainer: document.querySelector('.gallery'),
+  element: document.querySelector('.btn-load-more'),
 };
 
 const loadMoreBtn = new LoadMoreBtn({
@@ -27,21 +26,20 @@ const newsApiService = new NewsApiService();
 refs.searchForm.addEventListener('submit', onSearch);
 loadMoreBtn.refs.button.addEventListener('click', fetchArticles);
 refs.articlesContainer.addEventListener('click', openModal);
+refs.element.addEventListener('click', onLoadMore)
 
 function onSearch(e) {
   e.preventDefault();
-
   newsApiService.query = e.currentTarget.elements.query.value;
-
+  
   if (newsApiService.query === '') {
     return onFetchError();
   }
 
   loadMoreBtn.show();
-    newsApiService.resetPage();
+  newsApiService.resetPage();
   clearArticlesContainer();
-    fetchArticles();
-    
+  fetchArticles();
 }
 
 function fetchArticles() {
@@ -49,9 +47,12 @@ function fetchArticles() {
     newsApiService.fetchArticles().then(articles => {
         appendArticlesMarkup(articles);
         loadMoreBtn.enable();
-        scrollToRenderedMarkup()
     })
     .catch(error => console.log(error))
+}
+
+function onLoadMore() {
+  onScroll();
 }
 
 function appendArticlesMarkup(articles) {
@@ -72,11 +73,11 @@ function openModal(event) {
         instance.show();
 }
 
-function scrollToRenderedMarkup() {
+function onScroll() {
   setTimeout(() => {
-    loadMoreBtn.refs.button.scrollIntoView({
+    refs.element.scrollIntoView({
+      block: 'start',
       behavior: 'smooth',
-      block: 'end',
     });
   }, 250);
 }
