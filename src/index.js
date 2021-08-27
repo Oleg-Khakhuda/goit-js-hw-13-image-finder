@@ -1,6 +1,6 @@
 import NewsApiService from './js/apiService';
 import LoadMoreBtn from './js/components/load-more-btn';
-import articlesTpl from './templates/articles.hbs';
+import imagesTpl from './templates/images.hbs';
 import * as basicLightbox from 'basiclightbox';
 import '../node_modules/basiclightbox/dist/basicLightbox.min.css';
 import { alert } from '@pnotify/core';
@@ -22,32 +22,33 @@ const loadMoreBtn = new LoadMoreBtn({
 
 const newsApiService = new NewsApiService();
 
-
 refs.searchForm.addEventListener('submit', onSearch);
-loadMoreBtn.refs.button.addEventListener('click', fetchArticles);
+loadMoreBtn.refs.button.addEventListener('click', fetchImages);
 refs.articlesContainer.addEventListener('click', openModal);
 refs.element.addEventListener('click', onLoadMore)
 
 function onSearch(e) {
-  e.preventDefault();
-  newsApiService.query = e.currentTarget.elements.query.value;
-  
-  if (newsApiService.query === '') {
-    return onFetchError();
-  }
+    e.preventDefault();
+    newsApiService.query = e.currentTarget.elements.query.value;
+    
+    if (newsApiService.query === '') {
+      return onFetchError();
+    }
 
-  loadMoreBtn.show();
-  newsApiService.resetPage();
-  clearArticlesContainer();
-  fetchArticles();
+    fetchImages();
+    clearArticlesContainer();
+    newsApiService.resetPage();
+    loadMoreBtn.show();
+    
+  
 }
 
-function fetchArticles() {
-  loadMoreBtn.disable();
-    newsApiService.fetchArticles().then(articles => {
-        appendArticlesMarkup(articles);
-        loadMoreBtn.enable();
-    })
+function fetchImages() {
+  loadMoreBtn.disable()
+  newsApiService.fetchImages().then(hits => {
+    appendArticlesMarkup(hits);
+    loadMoreBtn.enable();
+  })
     .catch(error => console.log(error))
 }
 
@@ -55,8 +56,8 @@ function onLoadMore() {
   onScroll();
 }
 
-function appendArticlesMarkup(articles) {
-  refs.articlesContainer.insertAdjacentHTML('beforeend', articlesTpl(articles));
+function appendArticlesMarkup(images) {
+  refs.articlesContainer.insertAdjacentHTML('beforeend', imagesTpl(images));
 }
 
 function clearArticlesContainer() {

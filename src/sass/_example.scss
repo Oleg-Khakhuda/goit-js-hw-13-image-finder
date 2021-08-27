@@ -15,7 +15,7 @@ body {
     Cantarell, sans-serif;
   line-height: 1.5;
   color: #2a2a2a;
-  background: linear-gradient(to left, #d3d6db, #595b5f);
+  background: linear-gradient(to left, #beebff, #d9e2f5);
 }
 
 .search-form {
@@ -23,15 +23,18 @@ body {
   justify-content: center;
   margin-top: 30px;
   margin-bottom: 30px;
+  width: auto;
 }
 
 .search-input {
   margin-right: 10px;
+  margin-bottom: 8px;
   padding-bottom: 2px;
   border-top: 2px;
   font-size: 25px;
   border: 2px solid black;
   border-radius: 5px;
+  padding: 0.375rem 0.75rem;
 }
 
 .search-input:focus {
@@ -40,14 +43,13 @@ body {
 
 .search-form-button {
   font-size: 25px;
-  background-color: white;
-  border: 2px solid black;
+  margin-bottom: 0;
   cursor: pointer;
   border-radius: 5px;
   padding: 10px;
 
   &:hover {
-    background-color: rgb(184, 240, 189);
+    background-color: rgb(56, 117, 231);
   }
 }
 
@@ -107,19 +109,46 @@ body {
   margin-top: 20px;
   margin-bottom: 20px;
   font-size: 25px;
-  background-color: white;
-  border: 2px solid black;
+  background-color: #007bff;
+  color: white;
   border-radius: 5px;
   padding: 10px;
   cursor: pointer;
 
   &:hover {
-    background-color: rgb(184, 240, 189);
+    background-color: rgb(56, 117, 231);
   }
 }
 
 img {
   display: block;
+}
+
+.button {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.button.is-hidden {
+  display: none;
+}
+
+.spinner-border-sm {
+  width: 27px;
+  height: 27px;
+  border-width: 0.2em;
+}
+
+.button > .spinner.is-hidden {
+  display: none;
+}
+
+.search-form {
+  display: flex;
+  justify-content: center;
+  padding: 8px;
+  margin-bottom: 24px;
 }
 
 .button {
