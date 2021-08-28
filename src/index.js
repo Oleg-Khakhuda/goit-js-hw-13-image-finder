@@ -11,21 +11,21 @@ import './sass/main.scss';
 const refs = {
   searchForm: document.querySelector('.search-form'),
   articlesContainer: document.querySelector('.gallery'),
-  element: document.querySelector('.btn-load-more'),
+  elementBtn: document.querySelector('.btn-load-more'),
+  scroll: document.querySelector('#scroll'),
 };
 
 const loadMoreBtn = new LoadMoreBtn({
   selector: '[data-action="load-more"]',
     hidden: true,
-  
 });
 
 const newsApiService = new NewsApiService();
 
 refs.searchForm.addEventListener('submit', onSearch);
-loadMoreBtn.refs.button.addEventListener('click', fetchImages);
+loadMoreBtn.refs.button.addEventListener('click', onFetchLoadMore);
 refs.articlesContainer.addEventListener('click', openModal);
-refs.element.addEventListener('click', onLoadMore)
+
 
 function onSearch(e) {
     e.preventDefault();
@@ -35,29 +35,32 @@ function onSearch(e) {
       return onFetchError();
     }
 
-    fetchImages();
     clearArticlesContainer();
     newsApiService.resetPage();
-    loadMoreBtn.show();
-    
-  
+    onFetchLoadMore();
+    loadMoreBtn.show(); 
 }
 
-function fetchImages() {
-  loadMoreBtn.disable()
-  newsApiService.fetchImages().then(hits => {
-    appendArticlesMarkup(hits);
-    loadMoreBtn.enable();
-  })
+function onFetchLoadMore() {
+  if (newsApiService.query !== '') {
+    loadMoreBtn.disable()
+    newsApiService.fetchImages().then(hits => {
+      appendImagesMarkup(hits);
+      loadMoreBtn.enable();
+    })
     .catch(error => console.log(error))
+  }
 }
 
-function onLoadMore() {
-  onScroll();
-}
+// Бесконечный скрол
 
-function appendArticlesMarkup(images) {
-  refs.articlesContainer.insertAdjacentHTML('beforeend', imagesTpl(images));
+const observer = new IntersectionObserver(onFetchLoadMore, {
+  rootMargin: '150px',
+});
+observer.observe(refs.scroll);
+
+function appendImagesMarkup(hits) {
+  refs.articlesContainer.insertAdjacentHTML('beforeend', imagesTpl(hits));
 }
 
 function clearArticlesContainer() {
@@ -71,18 +74,9 @@ function openModal(event) {
     const instance = basicLightbox.create(
             `<img src="${event.target.dataset.src}">`,
     );
-        instance.show();
+  instance.show();
 }
-
-function onScroll() {
-  setTimeout(() => {
-    refs.element.scrollIntoView({
-      block: 'start',
-      behavior: 'smooth',
-    });
-  }, 250);
-}
-
+  
 // Ненашли PNotify
 
 function onFetchError() {
@@ -91,6 +85,4 @@ function onFetchError() {
         delay: 3000,
     });
 }
-
-
 
