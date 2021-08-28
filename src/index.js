@@ -26,7 +26,6 @@ refs.searchForm.addEventListener('submit', onSearch);
 loadMoreBtn.refs.button.addEventListener('click', onFetchLoadMore);
 refs.articlesContainer.addEventListener('click', openModal);
 
-
 function onSearch(e) {
     e.preventDefault();
     newsApiService.query = e.currentTarget.elements.query.value;
@@ -51,13 +50,6 @@ function onFetchLoadMore() {
     .catch(error => console.log(error))
   }
 }
-
-// Бесконечный скрол
-
-const observer = new IntersectionObserver(onFetchLoadMore, {
-  rootMargin: '150px',
-});
-observer.observe(refs.scroll);
 
 function appendImagesMarkup(hits) {
   refs.articlesContainer.insertAdjacentHTML('beforeend', imagesTpl(hits));
@@ -86,3 +78,9 @@ function onFetchError() {
     });
 }
 
+// Бесконечный скрол
+
+const observer = new IntersectionObserver(onFetchLoadMore, {
+  rootMargin: '150px',
+});
+observer.observe(refs.scroll);
